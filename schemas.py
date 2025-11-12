@@ -12,7 +12,8 @@ Model name is converted to lowercase for the collection name:
 """
 
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Optional, List
+import datetime as dt
 
 # Example schemas (replace with your own):
 
@@ -38,11 +39,19 @@ class Product(BaseModel):
     category: str = Field(..., description="Product category")
     in_stock: bool = Field(True, description="Whether product is in stock")
 
-# Add your own schemas here:
-# --------------------------------------------------
+# Event management portal schemas
 
-# Note: The Flames database viewer will automatically:
-# 1. Read these schemas from GET /schema endpoint
-# 2. Use them for document validation when creating/editing
-# 3. Handle all database operations (CRUD) directly
-# 4. You don't need to create any database endpoints!
+class Event(BaseModel):
+    """
+    Events collection schema
+    Collection name: "event"
+    """
+    title: str = Field(..., description="Event title")
+    description: str = Field(..., description="Detailed description of the event")
+    event_date: dt.date = Field(..., description="Event date")
+    event_time: str = Field(..., description="Event time (e.g., 5:00 PM)")
+    location: str = Field(..., description="Venue or location")
+    category: str = Field(..., description="Category such as Tech, Cultural, Sports, Workshop")
+    cover_image: Optional[str] = Field(None, description="Cover image URL")
+    tags: List[str] = Field(default_factory=list, description="Searchable tags")
+    is_featured: bool = Field(False, description="Whether this is a featured event")
